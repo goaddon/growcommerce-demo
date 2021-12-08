@@ -25,4 +25,4 @@ https://www.example.com/gofetch_events
 
 where you should replace `https://www.example.com/` with the URL of your own website.
 
-The repository communicates with the shipping platform [Shipmondo](https://shipmondo.com/). To enable the communication with their API you should create an account there and generate an API token. This token should be saved in [GOEXPLORE > SECRETS](https://goaddon.com/en/addons/5bb227d283c3360abe01e036/manage#page=secrets) as `shipmondo_api_token`
+The repository communicates with the shipping platform [Shipmondo](https://shipmondo.com/). To enable the communication with their API you should create an account there and generate an API token. This token should be saved in [GOEXPLORE > SECRETS](https://goaddon.com/en/addons/5bb227d283c3360abe01e036/manage#page=secrets) as `shipmondo_api_token`.

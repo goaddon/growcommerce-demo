@@ -1,0 +1,77 @@
+{
+  "orders": {
+    "klass": "orders",
+    "query": {
+      "company_id": "{{ company_id }}",
+      "state": "open"
+    },
+    "projection": {
+      "_id": 1,
+      "order_number": 1,
+      "print_state": 1,
+      "shipping_name": 1,
+      "shipping_first_name": 1,
+      "shipping_last_name": 1,
+      "shipping_address_1": 1,
+      "shipping_address_2": 1,
+      "shipping_zip_code": 1,
+      "shipping_city": 1,
+      "email": 1
+    },
+    "sort": {
+      "datetime_first": 1
+    }
+  },
+  "order_lines": {
+    "klass": "order_lines",
+    "query": {
+      "company_id": "{{ company_id }}",
+      "order_id": {"$in": "{{ order_ids }}"}
+    },
+    "projection": {
+      "_id": 1,
+      "order_id": 1,
+      "variant_id": 1,
+      "product_name": 1,
+      "quantity": 1
+    }
+  },
+  "variants": {
+    "klass": "variants",
+    "query": {
+      "company_id": "{{ company_id }}",
+      "_id": {"$in": "{{ variant_ids }}"}
+    },
+    "projection": {
+      "_id": 1,
+      "stock": 1
+    }
+  },
+  "companies": {
+    "klass": "companies",
+    "query": {
+      "_id": "{{ _id }}"
+    },
+    "projection": {
+      "_id": 1,
+      "shipmondo_api_token": 1,
+      "shipmondo_name": 1,
+      "shipmondo_address_1": 1,
+      "shipmondo_zip_code": 1,
+      "shipmondo_city": 1,
+      "shipmondo_country_code": 1
+    }
+  },
+  "update_order": {
+    "klass": "orders",
+    "query": {
+      "company_id": "{{ company_id }}",
+      "_id": "{{ order_id }}"
+    },
+    "document": {
+      "$set": {
+        "print_state": "{{ print_state }}"
+      }
+    }
+  }
+}

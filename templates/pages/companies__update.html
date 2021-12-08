@@ -1,0 +1,14 @@
+{% if account._id != params.id %}
+  flashAlert("error", "{{ l.wrong_company }}");
+{% else %}
+  {% assign shipmondo_api_token = params.shipmondo_api_token | encrypt  %}
+  {% assign companies_update    = "update_company" | db_update_one: _id: account._id, shipmondo_api_token: shipmondo_api_token, shipmondo_name: params.shipmondo_name, shipmondo_address_1: params.shipmondo_address_1, shipmondo_zip_code: params.shipmondo_zip_code, shipmondo_city: params.shipmondo_city, shipmondo_country_code: params.shipmondo_country_code %}
+
+  {% if companies_update.matched_count != 1 %}
+    flashAlert("error", "{{ l.not_found }}");
+  {% elsif companies_update.updated_count != 1 %}
+    flashAlert("message", "{{ l.not_updated }}");
+  {% else %}
+    flashAlert("success", "{{ l.updated }}");
+  {% endif %}
+{% endif %}

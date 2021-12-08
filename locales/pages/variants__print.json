@@ -1,0 +1,18 @@
+{
+  "en": {
+    "title": "Print",
+    "variant_headers": {
+      "sku": "SKU",
+      "sku_2": "SKU 2",
+      "barcode": "Barcode"
+    }
+  },
+  "da": {
+    "title": "Print",
+    "variant_headers": {
+      "sku": "SKU",
+      "sku_2": "SKU 2",
+      "barcode": "Barcode"
+    }
+  }
+}

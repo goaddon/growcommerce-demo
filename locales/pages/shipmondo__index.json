@@ -1,0 +1,31 @@
+{
+  "en": {
+    "title": "Shipmondo",
+    "headline": "Your Shipmondo account",
+    "placeholders": {
+      "shipmondo_api_token": "Your API token",
+      "shipmondo_name": "Your company name",
+      "shipmondo_address_1": "Your address",
+      "shipmondo_zip_code": "Your ZIP code",
+      "shipmondo_city": "Your city",
+      "shipmondo_country_code": "Your country code"
+    },
+    "buttons": {
+      "update": "Update"
+    }
+  },
+  "da": {
+    "headline": "Din Shipmondo konto",
+    "placeholders": {
+      "shipmondo_api_token": "Dit API token",
+      "shipmondo_name": "Din virksomheds navn",
+      "shipmondo_address_1": "Din adresse",
+      "shipmondo_zip_code": "Dit postnummer",
+      "shipmondo_city": "Din by",
+      "shipmondo_country_code": "Din landekode"
+    },
+    "buttons": {
+      "update": "Opdater"
+    }
+  }
+}

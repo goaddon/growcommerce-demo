@@ -1,0 +1,26 @@
+<h5 class="mb-3">{{ l.headline }}</h5>
+<form class="update-task" action="{{ 'companies__update' | path_for: id: account._id, format: 'js' }}" method="post" data-remote="true">
+  <input type="hidden" name="_method" value="patch">
+  <div class="mb-3">
+    <input class="form-control me-3" type="text" name="shipmondo_api_token" placeholder="{{ l.placeholders.shipmondo_api_token }}" value="{{ account.shipmondo_api_token | decrypt }}">
+  </div>
+
+  <div class="mb-3">
+    <input class="form-control me-3" type="text" name="shipmondo_name" placeholder="{{ l.placeholders.shipmondo_name }}" value="{{ account.shipmondo_name }}">
+  </div>
+  <div class="mb-3">
+    <input class="form-control me-3" type="text" name="shipmondo_address_1" placeholder="{{ l.placeholders.shipmondo_address_1 }}" value="{{ account.shipmondo_address_1 }}">
+  </div>
+  <div class="mb-3">
+    <input class="form-control me-3" type="text" name="shipmondo_zip_code" placeholder="{{ l.placeholders.shipmondo_zip_code }}" value="{{ account.shipmondo_zip_code }}">
+  </div>
+  <div class="mb-3">
+    <input class="form-control me-3" type="text" name="shipmondo_city" placeholder="{{ l.placeholders.shipmondo_city }}" value="{{ account.shipmondo_city }}">
+  </div>
+  <div class="mb-3">
+    <input class="form-control me-3" type="text" name="shipmondo_country_code" placeholder="{{ l.placeholders.shipmondo_country_code }}" value="{{ account.shipmondo_country_code }}">
+  </div>
+  <div class="d-grid gap-2">
+    <input class="btn btn-outline-primary" type="submit" value="{{ l.buttons.update }}">
+  </div>
+</form>

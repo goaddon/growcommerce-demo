@@ -1,0 +1,16 @@
+{
+  "en": {
+    "title": "Scan",
+    "no_stock_change_parameter": "stock_change param is missing",
+    "no_variant": "No variant",
+    "stock_change": "Stock count change",
+    "stock": "New stock count"
+  },
+  "da": {
+    "title": "Scan",
+    "no_stock_change_parameter": "stock_change parameter mangler",
+    "no_variant": "Ingen variant",
+    "stock_change": "Ændring",
+    "stock": "Ny lagerbeholdning"
+  }
+}

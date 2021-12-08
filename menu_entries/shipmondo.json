@@ -1,0 +1,13 @@
+{
+  "title": {
+    "en": "Shipmondo",
+    "da": "Shipmondo"
+  },
+  "index": 0,
+  "paths": [
+    {
+      "controller": "shipmondo",
+      "action": "index"
+    }
+  ]
+}

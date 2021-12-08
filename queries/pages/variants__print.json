@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "klass": "variants",
+    "query": {
+      "company_id": "{{ company_id }}",
+      "_id": "{{ _id }}"
+    },
+    "projection": {
+      "_id": 1,
+      "sku": 1,
+      "sku_2": 1,
+      "barcode": 1,
+      "product_id": 1,
+      "variations": 1
+    }
+  },
+  "products": {
+    "klass": "products",
+    "query": {
+      "company_id": "{{ company_id }}",
+      "_id": "{{ _id }}"
+    },
+    "projection": {
+      "_id": 1,
+      "name": 1
+    }
+  }
+}

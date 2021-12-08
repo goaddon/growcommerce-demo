@@ -1,0 +1,151 @@
+{% assign orders_query = "orders" | db_find: company_id: params.company_id %}
+
+{% if orders_query.results_count == 0 %}
+  {"result": "No orders"}
+{% else %}
+
+  {% assign orders            = orders_query.results %}
+  {% assign order_ids         = "" %}
+
+  {% for order in orders %}
+    {% capture order_ids %}{{ order_ids }} {{ order._id }}{% endcapture %}
+  {% endfor %}
+
+  {% assign order_ids         = order_ids | lstrip | split: " " %}
+  {% assign order_lines_query = "order_lines" | db_find: company_id: params.company_id, order_ids: order_ids %}
+
+  {% if order_lines_query.results_count > 0 %}
+
+    {% assign order_lines = order_lines_query.results %}
+    {% assign variant_ids = "" %}
+
+    {% for order_line in order_lines %}
+      {% if order_line.variant_id != nil %}
+        {% capture variant_ids %}{{ variant_ids }} {{ order_line.variant_id }}{% endcapture %}
+      {% endif %}
+    {% endfor %}
+
+    {% assign variant_ids = variant_ids | lstrip | split: " " | uniq %}
+
+    {% if variant_ids.size > 0 %}
+
+      {% assign variants_query  = "variants" | db_find: company_id: params.company_id, variant_ids: variant_ids %}
+      {% assign variants        = variants_query.results %}
+      {% assign variants        = variants | to_hash: "_id" %}
+
+      {% for order_line in order_lines %}
+
+        {% assign variant_id = order_line.variant_id %}
+
+        {% if variant_id != nil %}
+
+          {% assign variant   = variants[variant_id] %}
+          {% assign stock     = variant.stock | plus: order_line.quantity %}
+          {% assign variant   = variant | push_to_hash: "stock", stock %}
+          {% assign variants  = variants | push_to_hash: variant_id, variant %}
+
+        {% endif %}
+      {% endfor %}
+
+      {% assign order_line_groups = order_lines | to_hash_groups: "order_id" %}
+      {% assign companies_query   = "companies" | db_find: _id: params.company_id %}
+      {% assign company           = companies_query.results.first %}
+
+      {% for order in orders %}
+
+        {% assign order_id    = order._id %}
+        {% assign order_lines = order_line_groups[order_id] %}
+
+        {% if order_lines != nil %}
+
+          {% assign printable       = true %}
+          {% assign package_weight  = 300 %}
+          {% assign packing_list    = "" %}
+
+          {% for order_line in order_lines %}
+
+            {% assign variant_id = order_line.variant_id %}
+
+            {% if variant_id != nil %}
+
+              {% assign variant         = variants[variant_id] %}
+              {% assign stock           = variant.stock | minus: order_line.quantity %}
+              {% assign weight          = 150 | times: order_line.quantity %}
+              {% assign package_weight  = weight | plus: weight %}
+              {% assign product_name    = order_line.product_name | decrypt %}
+
+              {% capture packing_list %}{{ packing_list }}{{ product_name }}: {{ order_line.quantity }} pcs. {% endcapture %}
+
+              {% if stock < 0 %}
+
+                {% assign printable = false %}
+
+              {% endif %}
+
+              {% assign variant   = variant | push_to_hash: "stock", stock %}
+              {% assign variants  = variants | push_to_hash: variant_id, variant %}
+
+            {% endif %}
+          {% endfor %}
+
+          {% if printable %}
+            {% if order.print_state == nil or order.print_state == "failed" %}
+
+              {% assign printing_order_query = "update_order" | db_update_one: company_id: params.company_id, order_id: order._id, print_state: "printing" %}
+
+              {% if printing_order_query.updated_count == 1 %}
+
+                {% assign shipping_name       = order.shipping_name | decrypt %}
+                {% assign shipping_first_name = order.shipping_first_name | decrypt %}
+                {% assign shipping_last_name  = order.shipping_last_name | decrypt %}
+
+                {% if shipping_name != nil %}
+
+                  {% assign name = shipping_name %}
+
+                {% else %}
+
+                  {% assign name = shipping_first_name %}
+                  {% capture name %}{{ name }} {{ shipping_last_name }}{% endcapture %}
+
+                {% endif %}
+
+                {% assign address_1           = order.shipping_address_1 | decrypt %}
+                {% assign address_2           = order.shipping_address_2 | decrypt %}
+                {% assign zip_code            = order.shipping_zip_code | decrypt %}
+                {% assign city                = order.shipping_city | decrypt %}
+                {% assign email               = order.email | decrypt %}
+                {% shipmondo_api_token        = company.shipmondo_api_token | decrypt %}
+
+                {% assign print_order = "print_order" | webhook: shipmondo_api_token: shipmondo_api_token, name: name, address_1: address_1, address_2: address_2, zip_code: zip_code, city: city, email: email, package_weight: package_weight, packing_list: packing_list, order_number: order.order_number, company_name: company.shipmondo_name, company_address1: company.shipmondo_address_1, company_zip_code: company.shipmondo_zip_code, company_city: company.shipmondo_city, country_code: company.shipmondo_country_code %}
+
+                {% if print_order.code != 200 %}
+
+                  {% assign reset_order_print_state_query = "update_order" | db_update_one: company_id: params.company_id, order_id: order._id, print_state: "failed" %}
+
+                {% else %}
+
+                  {% assign printed_order_query = "update_order" | db_update_one: company_id: params.company_id, order_id: order._id, print_state: "printed" %}
+
+                  {% if printing_order_query.updated_count == 1 %}
+
+                    {% assign order_line_ids  = "" %}
+
+                    {% for order_line in order_lines %}
+                      {% capture order_line_ids %}{{ order_line_ids }} {{ order_line._id }}{% endcapture %}
+                    {% endfor %}
+
+                    {% assign order_line_ids  = order_line_ids | lstrip | split: " " %}
+                    {% assign create_shipment = "create_shipment" | webhook: gofetch_url: project.addon_data.addon_5b9ff6463ab42f43522b30cf.url, gofetch_shop_api_token: project.secrets.gofetch_shop_api_token, order_id: order._id, order_line_ids: order_line_ids %}
+
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+  {"result": "Run finished successfully"}
+{% endif %}

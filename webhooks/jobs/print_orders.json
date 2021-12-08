@@ -1,0 +1,54 @@
+{
+  "print_order": {
+    "method": "post",
+    "url": "https://app.shipmondo.com/api/public/v3/shipments",
+    "headers": {
+      "Authorization": "{{ shipmondo_api_token }}",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "test_mode": true,
+      "own_agreement": false,
+      "product_code": "GLSDK_SD",
+      "service_codes": "EMAIL_NT",
+      "automatic_select_service_point": true,
+      "sender": {
+        "name": "{{ company_name }}",
+        "address1": "{{ company_address1 }}",
+        "zipcode": "{{ company_zip_code }}",
+        "city": "{{ company_city }}",
+        "country_code": "{{ country_code }}"
+      },
+      "receiver": {
+        "name": "{{ name }}",
+        "address1": "{{ address_1 }}",
+        "address2": "{{ address_2 }}",
+        "zipcode": "{{ zip_code }}",
+        "city": "{{ city }}",
+        "country_code": "{{ country_code }}",
+        "email": "{{ email }}",
+        "mobile": "{{ phone }}"
+      },
+      "parcels": [
+        {
+          "weight": "{{ package_weight }}"
+        }
+      ],
+      "print": true,
+      "reference": "Order: {{ order_number }}. {{ packing_list }}"
+    }
+  },
+  "create_shipment": {
+    "method": "patch",
+    "url": "https://{{ gofetch_url }}/shop_api/v1/orders/{{ order_id }}/create_shipment",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "{{ gofetch_shop_api_token }}"
+    },
+    "body": {
+      "data": {
+        "order_line_ids": "{{ order_line_ids }}"
+      }
+    }
+  }
+}

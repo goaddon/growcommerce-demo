@@ -1,0 +1,14 @@
+{
+  "en": {
+    "wrong_company": "Wrong company",
+    "updated": "You've updated",
+    "not_found": "The account wasn't found",
+    "not_updated": "Nothing to update"
+  },
+  "da": {
+    "wrong_company": "Forkert virksomhed",
+    "updated": "Du har opdateret",
+    "not_found": "Ingen konto fundet",
+    "not_updated": "Intet at opdatere"
+  }
+}

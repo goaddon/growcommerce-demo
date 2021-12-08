@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "klass": "variants",
+    "query": {
+      "_id": "{{ _id }}",
+      "company_id": "{{ company_id }}"
+    },
+    "projection": {
+      "_id": 1
+    }
+  }
+}

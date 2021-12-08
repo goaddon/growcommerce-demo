@@ -1,0 +1,9 @@
+{
+  "authenticate": {
+    "gofetch_api": false
+  },
+  "container": {
+    "gofetch_events__index": "gofetch_api",
+    "gofetch_events__create": "gofetch_api"
+  }
+}

@@ -1,0 +1,38 @@
+<!-- GET /variants/:id/scan -->
+
+{% if params.stock_change == nil %}
+
+  <h1 class="display-4">{{ l.no_stock_change_parameter }}</h1>
+
+{% else %}
+
+  {% assign variants_query = "variants" | db_count: _id: params.id, company_id: account._id %}
+
+  {% if variants_query.results_count != 1 %}
+
+    <h5 class="mb-3">{{ l.no_variant }}</h5>
+
+  {% else %}
+
+    {% assign stock_change = params.stock_change | plus: 0 %}
+
+    {% assign variants_update = "update_variant" | webhook: gofetch_url: project.addon_data.addon_5b9ff6463ab42f43522b30cf.url, gofetch_shop_api_token: project.secrets.gofetch_shop_api_token, variant_id: params.id, stock_change: stock_change %}
+
+    {% if variants_update.code != 200 %}
+
+      <h5 class="mb-3">{{ variants_update.code }}: {{ variants_update.body.error }}</h5>
+
+    {% else %}
+
+      <p>{{ l.stock_change }}</p>
+      <p><h5 class="mb-3">{{ stock_change }}</h5></p>
+
+      {% if variants_update.body.result.stock != nil %}
+
+        <p>{{ l.stock }}</p>
+        <p><h5 class="mb-3">{{ variants_update.body.result.stock }}</h5></p>
+
+      {% endif %}
+    {% endif %}
+  {% endif %}
+{% endif %}

@@ -7,7 +7,6 @@
       "Content-Type": "application/json"
     },
     "body": {
-      "test_mode": true,
       "own_agreement": false,
       "product_code": "GLSDK_SD",
       "service_codes": "EMAIL_NT",

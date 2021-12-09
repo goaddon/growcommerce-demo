@@ -1,5 +1,3 @@
-<!-- POST /gofetch_events -->
-
 {% if project.secrets.gofetch_webhook_token == nil or project.secrets.gofetch_webhook_token != headers.authorization %}
 
   {"status": "500", "error": "Can not authorize"}

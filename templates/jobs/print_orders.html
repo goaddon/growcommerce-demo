@@ -115,7 +115,7 @@
                 {% assign zip_code            = order.shipping_zip_code | decrypt %}
                 {% assign city                = order.shipping_city | decrypt %}
                 {% assign email               = order.email | decrypt %}
-                {% shipmondo_api_token        = company.shipmondo_api_token | decrypt %}
+                {% assign shipmondo_api_token = company.shipmondo_api_token | decrypt %}
 
                 {% assign print_order = "print_order" | webhook: shipmondo_api_token: shipmondo_api_token, name: name, address_1: address_1, address_2: address_2, zip_code: zip_code, city: city, email: email, package_weight: package_weight, packing_list: packing_list, order_number: order.order_number, company_name: company.shipmondo_name, company_address1: company.shipmondo_address_1, company_zip_code: company.shipmondo_zip_code, company_city: company.shipmondo_city, country_code: company.shipmondo_country_code %}
 
